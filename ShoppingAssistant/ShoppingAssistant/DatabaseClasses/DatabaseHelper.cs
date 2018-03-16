@@ -16,7 +16,7 @@ namespace ShoppingAssistant.DatabaseClasses
         /// <summary>
         /// Database connection object
         /// </summary>
-        protected readonly SQLiteAsyncConnection DatabaseAsyncConnection;
+        protected static SQLiteAsyncConnection DatabaseAsyncConnection;
 
         /// <summary>
         /// Constructor
@@ -24,7 +24,10 @@ namespace ShoppingAssistant.DatabaseClasses
         /// <param name="dbPath"></param>
         public DatabaseHelper(string dbPath)
         {
-            DatabaseAsyncConnection = new SQLiteAsyncConnection(dbPath);
+            if (DatabaseAsyncConnection == null)
+            {
+                DatabaseAsyncConnection = new SQLiteAsyncConnection(dbPath);
+            }
 
             // Drop tables
             //DatabaseAsyncConnection.DropTableAsync<UserModel>();

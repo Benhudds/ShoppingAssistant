@@ -118,7 +118,7 @@ namespace ShoppingAssistant.DatabaseClasses
             items?.RemoveAll(item => item.Name == null && item.Measure == null);
 
             // Select the ItemQuantityPairModels and attach them to the relevant ShoppingListModels
-            items?.ForEach(i => lists.FirstOrDefault(l => l.LocalDbId == i.RemoteDbShoppingListId)?.Items.Add(i));
+            items?.ForEach(i => lists.FirstOrDefault(l => l.LocalDbId == i.LocalDbShoppingListId)?.AddItem(i));
 
             // Return the ShoppingListModels
             return lists;   
@@ -139,7 +139,7 @@ namespace ShoppingAssistant.DatabaseClasses
             // Save the item quantity pairs
             foreach (var item in list.Items)
             {
-                item.RemoteDbShoppingListId = list.LocalDbId.Value;
+                item.LocalDbShoppingListId = list.LocalDbId;
                 SaveItemsAsync(item);
             }
             

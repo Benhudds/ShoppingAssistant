@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShoppingAssistant.Views.MatchView">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Margin="10,10,0,0"
+                   Text="Select different item to match with"
+                   FontSize="14"/>
+            <StackLayout Orientation="Vertical"
+                         Margin="10,10,0,0"
+                         HorizontalOptions="Fill">
+                <StackLayout Orientation="Vertical">
+                    <Label Text="{Binding Path=Iqp.Name, StringFormat='Item: {0}'}"
+                               Style="{DynamicResource ListItemDetailTextStyle}"
+                               VerticalOptions="Center"/>
+                    <StackLayout Orientation="Horizontal">
+
+                        <Label Text="{Binding Path=Iqp.Quantity, StringFormat='Quantity: {0}'}"
+                               Style="{DynamicResource ListItemDetailTextStyle}"
+                               HorizontalOptions="Start"
+                               VerticalOptions="Center"/>
+                        <Label Text="{Binding Path=Iqp.Measurement, StringFormat='Measurement: {0}'}"
+                               Style="{DynamicResource ListItemDetailTextStyle}"
+                               HorizontalOptions="End"
+                               VerticalOptions="Center"/>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+            <ListView ItemsSource="{Binding Ipls}"
+                  ItemTapped="Handle_ItemTapped"
+                  CachingStrategy="RecycleElement"
+                  Margin="10,10,10,0"
+                  RowHeight="70">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal"
+                                         HorizontalOptions="FillAndExpand">
+                                <Image Source="{Binding ImageUrl}"/>
+                                <StackLayout Orientation="Vertical"
+                                         VerticalOptions="FillAndExpand"
+                                         HorizontalOptions="FillAndExpand">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="{Binding Name}" 
+                                               Style="{DynamicResource ListItemTextStyle}"
+                                               HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding Path=Price, StringFormat='Total: £{0:0.00}'}" 
+                                               Style="{DynamicResource ListItemTextStyle}"
+                                               HorizontalOptions="End"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

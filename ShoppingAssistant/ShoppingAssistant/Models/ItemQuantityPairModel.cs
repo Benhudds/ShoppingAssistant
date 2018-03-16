@@ -32,6 +32,12 @@ namespace ShoppingAssistant.Models
         public int RemoteDbShoppingListId { get; set; }
 
         /// <summary>
+        /// Local database shopping list identifier
+        /// Stored in the local database
+        /// </summary>
+        public int? LocalDbShoppingListId { get; set; }
+
+        /// <summary>
         /// Quantity required
         /// Stored in the local database
         /// Supplied by remote database

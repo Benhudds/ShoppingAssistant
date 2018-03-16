@@ -46,7 +46,7 @@ namespace ShoppingAssistant.UWP.Dependencies
         }
 
         /// <summary>
-        /// Infor level message
+        /// Info level message
         /// </summary>
         /// <param name="tag"></param>
         /// <param name="message"></param>

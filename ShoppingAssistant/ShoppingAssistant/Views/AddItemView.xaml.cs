@@ -88,6 +88,7 @@ namespace ShoppingAssistant
             Items = new ObservableCollection<string>();
             Recipes = new ObservableCollection<Recipe>();
 		    ItemsListView.HeightRequest = 0;
+		    RowError.Height = 0;
 			
 			// Set binding context
 			BindingContext = this;
@@ -124,6 +125,11 @@ namespace ShoppingAssistant
         /// </summary>
 		private async void SearchForRecipeAsync()
         {
+            if (!CheckRecipeInput())
+            {
+                return;
+            }
+
             // Clear the list view and display refreshing symbol
             Recipes.Clear();
             RecipeListView.IsRefreshing = true;
@@ -266,6 +272,58 @@ namespace ShoppingAssistant
 		    ItemsListView.HeightRequest = Items.Count * 40;
 		}
 
+        /// <summary>
+        /// Check the user input fields in item mode
+        /// Return true if valid
+        /// </summary>
+        /// <returns></returns>
+	    private bool CheckItemInput()
+	    {
+	        if (string.IsNullOrEmpty(ItemFilterText))
+	        {
+	            LabelError.Text = "Item cannot be blank";
+	            RowError.Height = GridLength.Auto;
+                return false;
+	        }
+
+            if (string.IsNullOrEmpty(Quantity))
+	        {
+	            LabelError.Text = "Quantity cannot be blank";
+	            RowError.Height = GridLength.Auto;
+                return false;
+	        }
+
+	        if (string.IsNullOrEmpty(Measure))
+	        {
+	            LabelError.Text = "Measurement cannot be blank";
+	            RowError.Height = GridLength.Auto;
+                return false;
+	        }
+
+	        LabelError.Text = "";
+	        RowError.Height = 0;
+	        return true;
+        }
+
+        /// <summary>
+        /// Check the user input fields in recipe mode
+        /// Return true if valid
+        /// </summary>
+        /// <returns></returns>
+	    private bool CheckRecipeInput()
+	    {
+	        if (string.IsNullOrEmpty(RecipeFilterText))
+	        {
+	            LabelError.Text = "Recipe cannot be blank";
+	            RowError.Height = GridLength.Auto;
+                return false;
+	        }
+
+	        LabelError.Text = "";
+	        RowError.Height = 0;
+            return true;
+	    }
+
 		/// <summary>
 		/// Method to create a new ItemQuantityPair and raise the relevant event
 		/// </summary>
@@ -277,6 +335,11 @@ namespace ShoppingAssistant
             // Check which mode this is running in
             if (RowRecipeSearch.Height.Value == 0)
 		    {
+		        if (!CheckItemInput())
+		        {
+		            return;
+		        }
+
 		        // Add the new item to the collection
 		        App.MasterController.AddItem(ItemFilterText);
 
@@ -284,15 +347,23 @@ namespace ShoppingAssistant
 		        {
 		            Name = ItemFilterText.Trim(),
 		            Quantity = Double.Parse(Quantity),
-                    Measure = Measure.Trim()
+		            Measure = Measure.Trim()
 		        };
 
 		        models.Add(iqp);
-            }
+		        
+		    }
             else if (RecipeListView.SelectedItem != null)
             {
                 // Add the recipe ingredients to the collection
                 var recipe = (Recipe) RecipeListView.SelectedItem;
+
+                if (recipe == null)
+                {
+                    LabelError.Text = "Please select a recipe";
+                    RowError.Height = GridLength.Auto;
+                    return;
+                }
 
                 foreach (var ingredient in recipe.Ingredients)
                 {

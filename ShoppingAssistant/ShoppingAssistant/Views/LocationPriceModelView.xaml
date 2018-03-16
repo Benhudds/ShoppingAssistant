@@ -32,28 +32,31 @@
                   CachingStrategy="RecycleElement"
                   VerticalOptions="Fill"
                   Margin="10,10,10,0"
-                  RowHeight="70">
+                  RowHeight="70"
+                  x:Name="ListViewItemMatches">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout Orientation="Horizontal">
+                            <StackLayout Orientation="Horizontal"
+                                         HorizontalOptions="FillAndExpand">
                                 <Image Source="{Binding ImageUrl}"/>
-                            <StackLayout Orientation="Vertical"
-                                         VerticalOptions="FillAndExpand">
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding Path=Iqp.Name, StringFormat='Item: {0}'}" 
-                                           Style="{DynamicResource ListItemTextStyle}"
-                                           HorizontalOptions="StartAndExpand"/>
-                                    <Label Text="{Binding Path=Price, StringFormat='Price: £{0:0.00}'}" 
-                                           Style="{DynamicResource ListItemTextStyle}"
-                                           HorizontalOptions="End"/>
-                                </StackLayout>
-                                <StackLayout Orientation="Horizontal"
-                                            MinimumHeightRequest="100">
-                                    <Label Text="{Binding Path=MatchedTo, StringFormat='Matched to: {0}'}"
-                                        Style="{DynamicResource ListItemDetailTextStyle}"
-                                        HorizontalOptions="End"/>
-                                </StackLayout>
+                                <StackLayout Orientation="Vertical"
+                                             VerticalOptions="FillAndExpand"
+                                             HorizontalOptions="FillAndExpand">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="{Binding Path=PotentialMatch.Iqp.Name, StringFormat='Item: {0}'}" 
+                                               Style="{DynamicResource ListItemTextStyle}"
+                                               HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding Path=Price, StringFormat='Price: £{0:0.00}'}" 
+                                               Style="{DynamicResource ListItemTextStyle}"
+                                               HorizontalOptions="End"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal"
+                                                MinimumHeightRequest="100">
+                                        <Label Text="{Binding Path=MatchedTo, StringFormat='Matched to: {0}'}"
+                                            Style="{DynamicResource ListItemDetailTextStyle}"
+                                            HorizontalOptions="End"/>
+                                    </StackLayout>
                                 </StackLayout>
                             </StackLayout>
                         </ViewCell>

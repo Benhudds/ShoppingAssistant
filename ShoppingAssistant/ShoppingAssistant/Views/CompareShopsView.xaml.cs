@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using ShoppingAssistant.Controllers;
+using ShoppingAssistant.DatabaseClasses;
 using ShoppingAssistant.Models;
 using ShoppingAssistant.ViewModels;
 using Xamarin.Forms;
@@ -42,7 +44,7 @@ namespace ShoppingAssistant.Views
         /// Bindable Property
         /// </summary>
 	    public ObservableCollection<string> PickerTextCollection => pickerTextCollection;
-
+        
 		/// <summary>
 		/// Constructor 
 		/// </summary>
@@ -50,7 +52,7 @@ namespace ShoppingAssistant.Views
 		public CompareShopsView(ShoppingListModel list)
 		{
 			InitializeComponent ();
-
+            
 			shoppingList = list;
 			Title = shoppingList.Name;
 			
@@ -108,23 +110,27 @@ namespace ShoppingAssistant.Views
                     // Loop through each iqp in the shopping list
 	                foreach (var item in shoppingList.Items)
 	                {
-                        // Get the best ipl match for the iqp
-	                    var ipl = GetBestMatch(item, location);
 
-	                    if (ipl == null)
-	                    {
-	                        break;
-	                    }
+	                    //if (ipl == null)
+	                    //{
+	                    //    break;
+	                    //}
 
                         // Create an ItemMatch to be added to the LocationPriceViewModel
 	                    var itemMatch = new ItemMatchViewModel()
 	                    {
-	                        Iqp = item,
+                            PotentialMatch = new PotentialMatchViewModel()
+                            {
+                                Iqp = item
+                            },
 	                        Matched = false,
 	                    };
 
+	                    // Get the best ipl match for the iqp
+	                    var ipl = GetBestMatch(item, location, itemMatch);
+
                         // Calculate price and set attributes if ipl match has been found
-	                    if (ipl != null)
+                        if (ipl != null)
 	                    {
 	                        var price = CalculatePrice(item, ipl);
 	                        lpm.Price += price;
@@ -165,7 +171,7 @@ namespace ShoppingAssistant.Views
         /// <param name="iqp"></param>
         /// <param name="ipl"></param>
         /// <returns></returns>
-	    private double CalculatePrice(ItemQuantityPairModel iqp, ItemPriceLocationModel ipl)
+	    public static double CalculatePrice(ItemQuantityPairModel iqp, ItemPriceLocationModel ipl)
 	    {
 	        if (iqp.Measure == ipl.Measure)
 	        {
@@ -193,7 +199,7 @@ namespace ShoppingAssistant.Views
 	    /// <param name="iqp"></param>
 	    /// <param name="location"></param>
 	    /// <returns></returns>
-	    private ItemPriceLocationModel GetBestMatch(ItemQuantityPairModel iqp, LocationModel location)
+	    private ItemPriceLocationModel GetBestMatch(ItemQuantityPairModel iqp, LocationModel location, ItemMatchViewModel itemMatch)
 	    {
 	        // Split the iqp name into its contituent words
 	        var split = iqp.Name.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries);
@@ -212,9 +218,22 @@ namespace ShoppingAssistant.Views
 	                item = ipl,
 	                count = ipl.Name.Split(' ').Distinct().Sum(p => split.Contains(p.ToLower()) ? 1 : 0)
 	            });
-
+            
 	        // Order by number of hits
 	        res = res.OrderByDescending(p => p.count);
+
+            // Get any stored matches from database
+	        var matches = GetItemMatches();
+	        if (matches.Any())
+	        {
+	            var storedMatch = matches.FirstOrDefault(match => match.Item == iqp.Name);
+	            if (storedMatch != null && res.Any(r => r.item.Name == storedMatch.Match))
+	            {
+	                res.Select(p => p.item).ForEach(itemMatch.PotentialMatch.Ipls.Add);
+	                return res.Select(p => p.item).First(p => p.Name == storedMatch.Match);
+	            }
+            }
+
 
 	        // Remove lower matches
 	        if (res.Any())
@@ -226,21 +245,23 @@ namespace ShoppingAssistant.Views
 	        var measureMatches = res.Where(p => p.item.Name.ToLower().Contains(iqp.Measure.ToLower()));
 
 	        if (measureMatches.Any())
-	        {
+            {
+                res.Select(p => p.item).ForEach(itemMatch.PotentialMatch.Ipls.Add);
 	            return measureMatches.First().item;
 	        }
 
             // Finally order by price
-	        res = res.OrderBy(p => p.item.Price);
+	        //res = res.OrderBy(p => p.item.Price);
 
 	        // Return null if there is no match (all the counts are 0)
             if (!res.Any() || res.First().count == 0)
 	        {
 	            return null;
 	        }
-            
+
             // Return the ipl with the greatest count
-	        return res.First().item;    
+	        res.Select(p => p.item).ForEach(itemMatch.PotentialMatch.Ipls.Add);
+            return res.First().item;    
 	    }
 
         /// <summary>
@@ -266,6 +287,15 @@ namespace ShoppingAssistant.Views
 	    {
 	        OrderBy();
 	    }
+
+        /// <summary>
+        /// Get item matches stored in the database
+        /// </summary>
+        /// <returns></returns>
+	    private IEnumerable<ItemMatch> GetItemMatches()
+        {
+            return App.MasterController.ItemMatchController.Matches;
+        }
 
         /// <summary>
         /// Method to order the location price models by the attribute designated by the picker

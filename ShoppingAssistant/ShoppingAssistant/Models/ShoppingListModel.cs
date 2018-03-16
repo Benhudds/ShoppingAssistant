@@ -37,13 +37,58 @@ namespace ShoppingAssistant.Models
         /// Observable Collection of Items
         /// </summary>
         public ObservableCollection<ItemQuantityPairModel> Items { get; } = new ObservableCollection<ItemQuantityPairModel>();
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
         public ShoppingListModel()
         {
             UrlSuffixProperty = UrlSuffix;
+        }
+
+        /// <summary>
+        /// Copy Constructor
+        /// </summary>
+        /// <param name="model"></param>
+        public ShoppingListModel(ShoppingListModel model)
+        {
+            UrlSuffixProperty = UrlSuffixProperty;
+
+            Name = model.Name;
+            DateCreated = model.DateCreated;
+            Deleted = model.Deleted;
+            LastUpdated = model.LastUpdated;
+            RemoteDbId = model.RemoteDbId;
+            LocalDbId = model.LocalDbId;
+
+            Items.Clear();
+            model.Items.ForEach(i => Items.Add(i));
+        }
+
+        /// <summary>
+        /// Assignment operator
+        /// </summary>
+        /// <param name="model"></param>
+        public void Assignment(ShoppingListModel model)
+        {
+            Name = model.Name;
+            DateCreated = model.DateCreated;
+            Deleted = model.Deleted;
+            RemoteDbId = model.RemoteDbId;
+
+            foreach (ItemQuantityPairModel item in model.Items)
+            {
+                var itemMatch = Items.First(i => i.RemoteDbId == item.RemoteDbId && i.RemoteDbShoppingListId == item.RemoteDbShoppingListId);
+                if (itemMatch != null)
+                {
+                    item.LocalDbId = itemMatch.LocalDbId;
+                    Items.Remove(itemMatch);
+                    Items.Add(item);
+                }
+            }
+
+            //Items.Clear();
+            //model.Items.ForEach(i => Items.Add(i));
         }
 
         /// <summary>

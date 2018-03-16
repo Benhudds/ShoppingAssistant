@@ -15,10 +15,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)APIClasses\LoginAPIHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)APIClasses\RubyDateParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)APIClasses\ShoppingListAPIHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\ItemMatchController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\LoginController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\ShoppingListController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\CustomEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DatabaseClasses\DatabaseHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DatabaseClasses\ItemMatchDatabaseHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInterfaces\IFileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DatabaseClasses\LocationModelDatabaseHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Crypt\Crypt.cs" />
@@ -30,6 +32,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\GeolocationController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInterfaces\ILog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\EdamamApiResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ItemMatch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ItemPriceLocationModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ItemQuantityPairModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ListOwnerModel.cs" />
@@ -42,6 +45,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\UserModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ItemMatchViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LocationPriceViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PotentialMatchViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\AddItemPriceLocationView.xaml.cs">
       <DependentUpon>AddItemPriceLocationView.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -60,6 +64,10 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\MatchView.xaml.cs">
+      <DependentUpon>MatchView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\NearbyLocationsView.xaml.cs">
@@ -184,6 +192,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\LocationPriceModelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\MatchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

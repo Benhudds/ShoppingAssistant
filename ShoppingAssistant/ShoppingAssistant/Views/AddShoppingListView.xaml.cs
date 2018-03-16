@@ -37,8 +37,9 @@ namespace ShoppingAssistant.Views
 			NameField = DateTime.Now.ToString();
 
 			BindingContext = this;
+		    RowError.Height = 0;
 
-			var btnAddItem = this.FindByName<Button>("BtnAddList");
+            var btnAddItem = this.FindByName<Button>("BtnAddList");
 			btnAddItem.Clicked += delegate { RaiseNewShoppingListEvent(); };
 		}
 		
@@ -47,6 +48,11 @@ namespace ShoppingAssistant.Views
         /// </summary>
 		private void RaiseNewShoppingListEvent()
 		{
+		    if (!CheckInput())
+		    {
+		        return;
+		    }
+
 			var newShoppingListModel = new ShoppingListModel()
 			{
 				Name = this.NameField,
@@ -57,5 +63,19 @@ namespace ShoppingAssistant.Views
 
 			callback?.Invoke(this, new ShoppingListEventArgs(newShoppingListModel));
 		}
-	}
+
+	    private bool CheckInput()
+	    {
+	        if (string.IsNullOrEmpty(NameField))
+	        {
+	            LabelError.Text = "Name cannot be blank";
+                RowError.Height = GridLength.Auto;
+	            return false;
+	        }
+
+	        LabelError.Text = "";
+	        RowError.Height = 0;
+            return true;
+	    }
+    }
 }

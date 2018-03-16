@@ -5,6 +5,8 @@
     <ContentPage.Content>
         <Grid Margin="10,10,10,10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"
+                               x:Name="RowError"/>
                 <RowDefinition Height="50"
                                x:Name="RowItemSearch"/>
                 <RowDefinition Height="0"
@@ -17,8 +19,14 @@
                                x:Name="RowEdamam"/>
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
+            <StackLayout Grid.Row="0"
+                         Margin="5,5,5,0">
+                <Label TextColor="Red"
+                       HorizontalOptions="Center"
+                       x:Name="LabelError"/>
+            </StackLayout>
             <StackLayout Orientation="Horizontal"
-                         Grid.Row="0"
+                         Grid.Row="1"
                          x:Name="StackLayoutItemSearch">
                 <Label Text="Item: "
                            VerticalOptions="Center"/>
@@ -28,7 +36,7 @@
                            HorizontalOptions="FillAndExpand"/>
             </StackLayout>
             <StackLayout Orientation="Vertical"
-                         Grid.Row="1"
+                         Grid.Row="2"
                          x:Name="StackLayoutRecipeSearch">
                 <StackLayout Orientation="Horizontal">
                     <!--<Label Text="Recipe: "
@@ -50,7 +58,7 @@
                     ItemTapped="Handle_ItemTapped"
                     CachingStrategy="RecycleElement"
                     x:Name="ItemsListView"
-                    Grid.Row="2">
+                    Grid.Row="3">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -66,7 +74,7 @@
                       CachingStrategy="RecycleElement"
                       x:Name="RecipeListView"
                       RowHeight="80"
-                      Grid.Row="2"
+                      Grid.Row="3"
                       IsVisible="False">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -92,7 +100,7 @@
                 </ListView.ItemTemplate>
             </ListView>
             <StackLayout Orientation="Horizontal"
-                         Grid.Row="3"
+                         Grid.Row="4"
                          Padding="0,0,5,0">
                 <Label Text="Quantity: "
                        VerticalOptions="Center"/>
@@ -106,14 +114,14 @@
                        Text="{Binding Measure}"
                        HorizontalOptions="FillAndExpand"></Entry>
             </StackLayout>
-            <StackLayout Grid.Row="4"
+            <StackLayout Grid.Row="5"
                          Padding="0,0,5,0"
                          VerticalOptions="EndAndExpand"
                          HorizontalOptions="End">
                 <Image Source="https://developer.edamam.com/images/transparent.png"></Image>
             </StackLayout>
             <Grid HorizontalOptions="Fill"
-                      Grid.Row="5">
+                      Grid.Row="6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0"
                                           x:Name="ColumnFindMore"/>

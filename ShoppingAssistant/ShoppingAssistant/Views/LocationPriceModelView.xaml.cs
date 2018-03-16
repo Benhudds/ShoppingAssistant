@@ -8,6 +8,8 @@ namespace ShoppingAssistant.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class LocationPriceModelView : ContentPage
 	{
+	    private LocationPriceViewModel model;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -18,6 +20,7 @@ namespace ShoppingAssistant.Views
             
 		    Title = model.ShoppingListName;
 
+		    this.model = model;
 		    BindingContext = model;
 		}
 
@@ -27,10 +30,13 @@ namespace ShoppingAssistant.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-	    private void Handle_ItemTapped(object sender, EventArgs args)
-	    {
+	    private async void Handle_ItemTapped(object sender, EventArgs args)
+        {
+            ItemMatchViewModel itemMatch = (ItemMatchViewModel) ListViewItemMatches.SelectedItem;
+
             // Deselect the item
-	        ((ListView) sender).SelectedItem = null;
+            ((ListView)sender).SelectedItem = null;
+            await Navigation.PushAsync(new MatchView(model, itemMatch));
 	    }
 	}
 }

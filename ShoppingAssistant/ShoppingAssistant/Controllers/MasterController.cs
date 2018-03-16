@@ -28,7 +28,7 @@ namespace ShoppingAssistant.Controllers
         /// <summary>
         /// Local database name
         /// </summary>
-        private const string LocalDatabaseBaseName = "TodoSQLite1.db3";
+        public const string LocalDatabaseBaseName = "TodoSQLite1.db3";
 
         /// <summary>
         /// Local database path
@@ -50,6 +50,11 @@ namespace ShoppingAssistant.Controllers
         /// Location Controller class
         /// </summary>
         public LocationController LocationController { get; }
+
+        /// <summary>
+        /// Item Match Controller class
+        /// </summary>
+        public ItemMatchController ItemMatchController { get; }
 
         /// <summary>
         /// Login Controller class (for use with api and local database)
@@ -75,6 +80,7 @@ namespace ShoppingAssistant.Controllers
                 ShoppingListController = new ShoppingListController(localDatabasePath, helper);
                 LocationController = new LocationController(localDatabasePath, BaseApiUrl, helper);
                 LoginController = new LoginController(localDatabasePath, helper);
+                ItemMatchController = new ItemMatchController(localDatabasePath);
                 EdamamApiHelper = new EdamamApiHelper(BaseEdamamApiUrl);
             }
             catch (Exception e)

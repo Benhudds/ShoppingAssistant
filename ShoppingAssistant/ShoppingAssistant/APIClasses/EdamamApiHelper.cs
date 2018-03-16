@@ -123,7 +123,7 @@ namespace ShoppingAssistant.APIClasses
                             var end = text.LastIndexOf(')');
 
                             // Remove any text between the brackets
-                            text.Remove(start, end - start);
+                            text = text.Remove(start, end - start + 1);
                         }
 
                         // Split into constituent parts

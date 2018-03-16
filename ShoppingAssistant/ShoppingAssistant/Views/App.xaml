@@ -21,7 +21,14 @@
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="Margin" Value="20,20,20,20" />
 	        </Style>
-            
+	        <Style x:Key="buttonGreenNoMargin" TargetType="Button">
+	            <Setter Property="BackgroundColor" Value="MediumSpringGreen" />
+	            <Setter Property="BorderRadius" Value="10" />
+	            <Setter Property="BorderWidth" Value="5" />
+	            <Setter Property="WidthRequest" Value="200" />
+                <Setter Property="TextColor" Value="White" />
+            </Style>
+
         </ResourceDictionary>
         <!-- Application resource dictionary -->
 

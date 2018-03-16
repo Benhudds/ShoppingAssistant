@@ -10,7 +10,9 @@ namespace ShoppingAssistant.ViewModels
         /// <summary>
         /// ItemQuantityPair
         /// </summary>
-        public ItemQuantityPairModel Iqp { get; set; }
+        //public ItemQuantityPairModel Iqp { get; set; }
+
+        public PotentialMatchViewModel PotentialMatch { get; set; }
 
         /// <summary>
         /// Whether the item has been matched or not

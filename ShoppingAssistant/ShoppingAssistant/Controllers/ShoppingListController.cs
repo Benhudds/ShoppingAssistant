@@ -160,10 +160,12 @@ namespace ShoppingAssistant.Controllers
                 {
                     // Replace the old list with the stored list
                     var index = ShoppingListModels.IndexOf(oldList);
-                    ShoppingListModels[index] = list;
+                    
+                    ShoppingListModels[index].Assignment(list);
 
-                    databaseHelper.DeleteShoppingListAsync(oldList);
-                    databaseHelper.SaveShoppingListAsync(list);
+                    //ShoppingListModels[index] = list;
+                    //databaseHelper.DeleteShoppingListAsync(oldList);
+                    databaseHelper.SaveShoppingListAsync(ShoppingListModels[index]);
 
                     App.Log.Debug("OnApiRetrieval", $"Found newer version of shopping list {list.Name} on API");
                     if (!oldList.Equals(list))

@@ -4,23 +4,38 @@
              xmlns:controls="clr-namespace:ShoppingAssistant.Controls;"
              x:Class="ShoppingAssistant.Views.AddShoppingListView">
     <ContentPage.Content>
-        <StackLayout>
-            <StackLayout Orientation="Horizontal"
-                         Margin="20,20,20,20">
-                <Label Text="Name: " 
-                       Style="{DynamicResource ListItemTextStyle}"
-                       HorizontalOptions="Start"
-                       VerticalOptions="CenterAndExpand"
-                       WidthRequest="80"/>
-                <controls:CustomEntry Placeholder="Name"
-                       Text="{Binding NameField}"
-                       HorizontalOptions="FillAndExpand"
-                       x:Name="EntryName"/>
+        <Grid Margin="10,10,10,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"
+                               x:Name="RowError"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackLayout Margin="5,5,5,0"
+                             Grid.Row="0">
+                <Label TextColor="Red"
+                        HorizontalOptions="Center"
+                        x:Name="LabelError"/>
             </StackLayout>
-            <Button Text="Add"
-                    x:Name="BtnAddList"
-                    Style="{StaticResource buttonGreen}"
-                    Margin="20,0,20,20"/>
-        </StackLayout>
+            <StackLayout Grid.Row="1">
+                <StackLayout Orientation="Horizontal"
+                             Margin="20,20,20,20">
+                    <Label Text="Name: " 
+                           Style="{DynamicResource ListItemTextStyle}"
+                           HorizontalOptions="Start"
+                           VerticalOptions="CenterAndExpand"
+                           WidthRequest="80"/>
+                    <controls:CustomEntry Placeholder="Name"
+                                          Text="{Binding NameField}"
+                                          HorizontalOptions="FillAndExpand"
+                                          x:Name="EntryName"/>
+                </StackLayout>
+                <Button Text="Add"
+                        x:Name="BtnAddList"
+                        Style="{StaticResource buttonGreen}"
+                        Margin="20,0,20,20"/>
+            </StackLayout>
+            
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
