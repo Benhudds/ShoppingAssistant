@@ -153,26 +153,25 @@ namespace ShoppingAssistant.Controllers
                     // Save the list to the database asynchronously
                     databaseHelper.SaveShoppingListAsync(list);
 
-                    App.Log.Debug("OnApiRetrieval", "New shopping list retrieved from API");
+                    App.Log.Info("OnApiRetrieval", "New shopping list retrieved from API");
                     App.NotificationHelper.CreateNotification(NewShoppingListTitle, string.Format(NewShoppingListText, list.Name));
                 }
                 else if (RubyDateParser.Compare(oldList.LastUpdated, list.LastUpdated) <= 0)
                 {
-                    // Replace the old list with the stored list
-                    var index = ShoppingListModels.IndexOf(oldList);
-                    
-                    ShoppingListModels[index].Assignment(list);
-
-                    //ShoppingListModels[index] = list;
-                    //databaseHelper.DeleteShoppingListAsync(oldList);
-                    databaseHelper.SaveShoppingListAsync(ShoppingListModels[index]);
-
-                    App.Log.Debug("OnApiRetrieval", $"Found newer version of shopping list {list.Name} on API");
+                    App.Log.Info("OnApiRetrieval", $"Found newer version of shopping list {list.Name} on API");
                     if (!oldList.Equals(list))
                     {
                         App.NotificationHelper.CreateNotification(UpdatedShoppingListTitle,
                             string.Format(UpdatedShoppingListText, list.Name));
                     }
+
+
+                    // Replace the old list with the stored list
+                    var index = ShoppingListModels.IndexOf(oldList);
+
+                    ShoppingListModels[index].Assignment(list);
+
+                    databaseHelper.SaveShoppingListAsync(ShoppingListModels[index]);
                 }
 
                 list.Items.Select(item => item.Name).ForEach(App.MasterController.AddItem);

@@ -78,12 +78,16 @@ namespace ShoppingAssistant.Models
 
             foreach (ItemQuantityPairModel item in model.Items)
             {
-                var itemMatch = Items.First(i => i.RemoteDbId == item.RemoteDbId && i.RemoteDbShoppingListId == item.RemoteDbShoppingListId);
+                var itemMatch = Items.FirstOrDefault(i => i.RemoteDbId == item.RemoteDbId && i.RemoteDbShoppingListId == item.RemoteDbShoppingListId);
                 if (itemMatch != null)
                 {
                     item.LocalDbId = itemMatch.LocalDbId;
                     Items.Remove(itemMatch);
-                    Items.Add(item);
+                    AddItem(item);
+                }
+                else
+                {
+                    AddItem(item);
                 }
             }
 
@@ -97,6 +101,11 @@ namespace ShoppingAssistant.Models
         /// <param name="newItem"></param>
         public void AddItem(ItemQuantityPairModel newItem)
         {
+            if (RemoteDbId != null)
+            {
+                newItem.RemoteDbShoppingListId = (int)RemoteDbId;
+            }
+
             Items.Add(newItem);
         }
 
@@ -106,7 +115,7 @@ namespace ShoppingAssistant.Models
         /// <param name="newItems"></param>
         public void AddItems(IEnumerable<ItemQuantityPairModel> newItems)
         {
-            newItems?.ForEach(newItem => Items.Add(newItem));
+            newItems?.ForEach(AddItem);
         }
 
         /// <summary>
