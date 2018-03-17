@@ -82,7 +82,7 @@ namespace ShoppingAssistant
         private async void AddItemEvent(object sender, ItemQuantityPairArgs args)
         {
             //App.MasterController.ShoppingListController.SaveShoppingListModel(shoppingList);
-            args.ItemQuantityPairModels.ForEach(shoppingList.Items.Add);
+            args.ItemQuantityPairModels.ForEach(shoppingList.AddItem);
             App.MasterController.ShoppingListController.SaveShoppingListModel(shoppingList);
 
             await Navigation.PopAsync();

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ShoppingAssistant.Controls;"
              x:Class="ShoppingAssistant.AddItemView">
     <ContentPage.Content>
         <Grid Margin="10,10,10,10">
@@ -32,7 +33,7 @@
                          x:Name="StackLayoutItemSearch">
                 <Label Text="Item: "
                            VerticalOptions="Center"/>
-                <Entry Placeholder="eg. bread"
+               <controls:CustomEntry Placeholder="eg. bread"
                            x:Name="EntryItemFilterText"
                            Text="{Binding ItemFilterText, Mode=TwoWay}"
                            HorizontalOptions="FillAndExpand"/>
@@ -43,7 +44,7 @@
                 <StackLayout Orientation="Horizontal">
                     <!--<Label Text="Recipe: "
                            VerticalOptions="Center"/>-->
-                    <Entry Placeholder="Recipe"
+                   <controls:CustomEntry Placeholder="Recipe"
                            x:Name="EntryRecipeFilterText"
                            Text="{Binding RecipeFilterText, Mode=TwoWay}"
                            HorizontalOptions="FillAndExpand"/>
@@ -106,7 +107,7 @@
                          Padding="0,0,5,0">
                 <Label Text="Quantity: "
                            VerticalOptions="Center"/>
-                    <Entry Placeholder="eg. 12"
+                   <controls:CustomEntry Placeholder="eg. 12"
                            Text="{Binding Quantity}"
                            HorizontalOptions="FillAndExpand"
                            Keyboard="Numeric"/>
@@ -116,9 +117,9 @@
                          Padding="0,0,5,0">
                     <Label Text="Measurement: "
                            VerticalOptions="Center"/>
-                <Entry Placeholder="eg. grams/pcs"
+                <controls:CustomEntry Placeholder="eg. grams/pcs"
                            Text="{Binding Measure}"
-                           HorizontalOptions="FillAndExpand"></Entry>
+                           HorizontalOptions="FillAndExpand"/>
             </StackLayout>
             <!--StackLayout Orientation="Horizontal"
                                       Grid.Row="4"
@@ -127,7 +128,7 @@
                 <Label Text="Quantity: "
                                               VerticalOptions="Center"/>
                 
-                <Entry Placeholder="eg. 12"
+               <controls:CustomEntry Placeholder="eg. 12"
                                               Text="{Binding Quantity}"
                                               HorizontalOptions="FillAndExpand"
                                               Keyboard="Numeric"/>
@@ -135,7 +136,7 @@
                 <Label Text="Measurement: "
                                               VerticalOptions="Center"/>
                 
-                <Entry Placeholder="eg. grams/pcs"
+               <controls:CustomEntry Placeholder="eg. grams/pcs"
                                               Text="{Binding Measure}"
                                               HorizontalOptions="FillAndExpand"></Entry>
                 </StackLayout-->

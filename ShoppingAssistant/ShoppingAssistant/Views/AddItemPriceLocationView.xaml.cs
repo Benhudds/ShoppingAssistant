@@ -51,14 +51,50 @@ namespace ShoppingAssistant.Views
 		/// </summary>
 		private void RaiseNewItemPriceLocationEvent()
 		{
-			callBack?.Invoke(this, new ItemPriceLocationEventArgs(new ItemPriceLocationModel()
-			{
-				Name = Name,
-				Price = float.Parse(Price),
-                Quantity = float.Parse(Quantity),
-                Measure = Measure,
-			}));
+		    if (CheckInput())
+		    {
+		        callBack?.Invoke(this, new ItemPriceLocationEventArgs(new ItemPriceLocationModel()
+		        {
+		            Name = Name,
+		            Price = float.Parse(Price),
+		            Quantity = float.Parse(Quantity),
+		            Measure = Measure,
+		        }));
+		    }
 		}
 
-	}
+        /// <summary>
+        /// Method to check the user input
+        /// </summary>
+        /// <returns></returns>
+	    private bool CheckInput()
+	    {
+	        if (string.IsNullOrEmpty(Name))
+	        {
+	            LabelError.Text = "Item cannot be blank";
+	            return false;
+	        }
+
+	        if (string.IsNullOrEmpty(Price))
+	        {
+	            LabelError.Text = "Price cannot be blank";
+	            return false;
+	        }
+
+	        if (string.IsNullOrEmpty(Quantity))
+	        {
+	            LabelError.Text = "Quantity cannot be blank";
+	            return false;
+	        }
+
+	        if (string.IsNullOrEmpty(Measure))
+	        {
+	            LabelError.Text = "Measure cannot be blank";
+	            return false;
+	        }
+
+            LabelError.Text = "";
+	        return true;
+	    }
+    }
 }

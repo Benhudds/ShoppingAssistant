@@ -240,7 +240,7 @@ namespace ShoppingAssistant.Controllers
         public async void SaveShoppingListModel(ShoppingListModel list)
         {
             SaveShoppingListToDatabase(list);
-
+            
             await apiHelper.SaveShoppingListModelAsync(list);
 
             // Resave with remote db id

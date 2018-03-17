@@ -1,39 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ShoppingAssistant.Controls;"
              x:Class="ShoppingAssistant.Views.AddItemPriceLocationView">
     <ContentPage.Content>
-        <StackLayout
-            Margin="20,20,20,20">
-            <StackLayout Orientation="Horizontal">
-                <Label Text="Item: "
-                       VerticalOptions="Center"/>
-                <Entry Text="{Binding Name}"
-                       HorizontalOptions="FillAndExpand"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition x:Name="RowError"
+                               Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackLayout Margin="20,20,20,0"
+                         Grid.Row="0">
+                <Label TextColor="Red"
+                       HorizontalOptions="Center"
+                       x:Name="LabelError"/>
             </StackLayout>
-            <StackLayout Orientation="Horizontal">
-                <Label Text="Price (£): "
-                       VerticalOptions="Center"/>
-                <Entry Text="{Binding Price}"
-                       Keyboard="Numeric"
-                       HorizontalOptions="FillAndExpand"/>
+            <StackLayout
+                Margin="20,20,20,20"
+                Grid.Row="1">
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Item: "
+                           VerticalOptions="Center"/>
+                    <controls:CustomEntry Text="{Binding Name}"
+                           HorizontalOptions="FillAndExpand"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Price (£): "
+                           VerticalOptions="Center"/>
+                    <controls:CustomEntry Text="{Binding Price}"
+                           Keyboard="Numeric"
+                           HorizontalOptions="FillAndExpand"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Quantity: "
+                           VerticalOptions="Center"/>
+                   <controls:CustomEntry Text="{Binding Quantity}"
+                           Keyboard="Numeric"
+                           HorizontalOptions="FillAndExpand"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Measurement: "
+                           VerticalOptions="Center"/>
+                   <controls:CustomEntry Text="{Binding Measure}"
+                           HorizontalOptions="FillAndExpand"/>
+                </StackLayout>
+                <Button Text="Add"
+                        x:Name="BtnAddIpl"
+                        Style="{StaticResource buttonGreen}"/>
             </StackLayout>
-            <StackLayout Orientation="Horizontal">
-                <Label Text="Quantity: "
-                       VerticalOptions="Center"/>
-                <Entry Text="{Binding Quantity}"
-                       Keyboard="Numeric"
-                       HorizontalOptions="FillAndExpand"/>
-            </StackLayout>
-            <StackLayout Orientation="Horizontal">
-                <Label Text="Measurement: "
-                       VerticalOptions="Center"/>
-                <Entry Text="{Binding Measure}"
-                       HorizontalOptions="FillAndExpand"/>
-            </StackLayout>
-            <Button Text="Add"
-                    x:Name="BtnAddIpl"
-                    Style="{StaticResource buttonGreen}"/>
-        </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

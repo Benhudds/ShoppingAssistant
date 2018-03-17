@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ShoppingAssistant.Controls;"
              x:Class="ShoppingAssistant.Views.LocationView">
     <ContentPage.Content>
         <Grid>
@@ -14,7 +15,7 @@
                          Padding="15,0,0,0">
                 <Label Text="Item: "
                        VerticalOptions="Center"/>
-                <Entry Placeholder="Filter"
+                <controls:CustomEntry Placeholder="Filter"
                        x:Name="ItemFilterTextEntry"
                        Text="{Binding ItemFilterText}"
                        HorizontalOptions="FillAndExpand"/>
