@@ -13,8 +13,10 @@
                                x:Name="RowRecipeSearch"/>
                 <RowDefinition Height="Auto"
                                x:Name="RowListView"/>
-                <RowDefinition Height="50"
+                <RowDefinition Height="Auto"
                                x:Name="RowQuantity"/>
+                <RowDefinition Height="Auto"
+                               x:Name="RowMeasurement"/>
                 <RowDefinition Height="0"
                                x:Name="RowEdamam"/>
                 <RowDefinition Height="100"/>
@@ -103,25 +105,48 @@
                          Grid.Row="4"
                          Padding="0,0,5,0">
                 <Label Text="Quantity: "
-                       VerticalOptions="Center"/>
-                <Entry Placeholder="eg. 12"
-                       Text="{Binding Quantity}"
-                       HorizontalOptions="FillAndExpand"
-                       Keyboard="Numeric"/>
-                <Label Text="Measurement: "
-                       VerticalOptions="Center"/>
-                <Entry Placeholder="eg. grams/pcs"
-                       Text="{Binding Measure}"
-                       HorizontalOptions="FillAndExpand"></Entry>
+                           VerticalOptions="Center"/>
+                    <Entry Placeholder="eg. 12"
+                           Text="{Binding Quantity}"
+                           HorizontalOptions="FillAndExpand"
+                           Keyboard="Numeric"/>
             </StackLayout>
-            <StackLayout Grid.Row="5"
+            <StackLayout Orientation="Horizontal"
+                         Grid.Row="5"
+                         Padding="0,0,5,0">
+                    <Label Text="Measurement: "
+                           VerticalOptions="Center"/>
+                <Entry Placeholder="eg. grams/pcs"
+                           Text="{Binding Measure}"
+                           HorizontalOptions="FillAndExpand"></Entry>
+            </StackLayout>
+            <!--StackLayout Orientation="Horizontal"
+                                      Grid.Row="4"
+                                      Padding="0,0,5,0">
+                
+                <Label Text="Quantity: "
+                                              VerticalOptions="Center"/>
+                
+                <Entry Placeholder="eg. 12"
+                                              Text="{Binding Quantity}"
+                                              HorizontalOptions="FillAndExpand"
+                                              Keyboard="Numeric"/>
+                
+                <Label Text="Measurement: "
+                                              VerticalOptions="Center"/>
+                
+                <Entry Placeholder="eg. grams/pcs"
+                                              Text="{Binding Measure}"
+                                              HorizontalOptions="FillAndExpand"></Entry>
+                </StackLayout-->
+                <StackLayout Grid.Row="6"
                          Padding="0,0,5,0"
                          VerticalOptions="EndAndExpand"
                          HorizontalOptions="End">
                 <Image Source="https://developer.edamam.com/images/transparent.png"></Image>
             </StackLayout>
             <Grid HorizontalOptions="Fill"
-                      Grid.Row="6">
+                      Grid.Row="7">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0"
                                           x:Name="ColumnFindMore"/>

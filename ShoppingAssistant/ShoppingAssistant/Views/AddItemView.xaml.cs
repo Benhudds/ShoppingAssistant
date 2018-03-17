@@ -166,6 +166,7 @@ namespace ShoppingAssistant
             ColumnFindMore.Width = new GridLength(1, GridUnitType.Star);
 
 			RowQuantity.Height = 0;
+		    RowMeasurement.Height = 0;
 			RowEdamam.Height = 20;
 		}
 
@@ -190,7 +191,8 @@ namespace ShoppingAssistant
 		    RowListView.Height = new GridLength(1, GridUnitType.Auto);
             ColumnFindMore.Width = new GridLength(0, GridUnitType.Absolute);
 
-            RowQuantity.Height = 50;
+            RowQuantity.Height = GridLength.Auto;
+            RowMeasurement.Height = GridLength.Auto;
 			RowEdamam.Height = 0;
 		}
 
