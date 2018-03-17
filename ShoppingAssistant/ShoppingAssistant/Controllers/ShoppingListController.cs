@@ -164,11 +164,15 @@ namespace ShoppingAssistant.Controllers
                         App.NotificationHelper.CreateNotification(UpdatedShoppingListTitle,
                             string.Format(UpdatedShoppingListText, list.Name));
                     }
-
-
+                    
                     // Replace the old list with the stored list
                     var index = ShoppingListModels.IndexOf(oldList);
 
+                    // If we hit this point then we have connection
+                    // Will delete any removed items by checking if they're present in the local copy but not in the response
+                    ShoppingListModels[index].DeleteOldItems(list);
+
+                    // Then add the new items
                     ShoppingListModels[index].Assignment(list);
 
                     databaseHelper.SaveShoppingListAsync(ShoppingListModels[index]);

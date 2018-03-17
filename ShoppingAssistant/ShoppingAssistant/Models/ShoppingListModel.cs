@@ -66,6 +66,16 @@ namespace ShoppingAssistant.Models
         }
 
         /// <summary>
+        /// Method to delete the old items, the ones in this list but not the other
+        /// </summary>
+        /// <param name="model"></param>
+        public void DeleteOldItems(ShoppingListModel model)
+        {
+            var itemsToDelete = Items.Where(item => model.Items.All(m => m.RemoteDbId != item.RemoteDbId));
+            itemsToDelete.ForEach(i => Items.Remove(i));
+        }
+
+        /// <summary>
         /// Assignment operator
         /// </summary>
         /// <param name="model"></param>
@@ -75,7 +85,7 @@ namespace ShoppingAssistant.Models
             DateCreated = model.DateCreated;
             Deleted = model.Deleted;
             RemoteDbId = model.RemoteDbId;
-
+            
             foreach (ItemQuantityPairModel item in model.Items)
             {
                 var itemMatch = Items.FirstOrDefault(i => i.RemoteDbId == item.RemoteDbId && i.RemoteDbShoppingListId == item.RemoteDbShoppingListId);
@@ -90,9 +100,6 @@ namespace ShoppingAssistant.Models
                     AddItem(item);
                 }
             }
-
-            //Items.Clear();
-            //model.Items.ForEach(i => Items.Add(i));
         }
 
         /// <summary>

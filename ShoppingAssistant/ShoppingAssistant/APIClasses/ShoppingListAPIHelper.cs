@@ -105,7 +105,7 @@ namespace ShoppingAssistant.APIClasses
         public async Task<bool> DeleteItemQuantityPairModelAsync(ItemQuantityPairModel item)
         {
             if (item.RemoteDbId == null) return true;
-            return await helper.DeleteItemAsync(helper.BaseUrl + ShoppingListModel.UrlSuffix + "/" +
+            return await helper.DeleteItemAsync(helper.BaseUrl + ShoppingListModel.UrlSuffix + "/" + item.RemoteDbShoppingListId + "/" +
                                                 ItemQuantityPairModel.UrlSuffix + "/" + item.RemoteDbId);
         }
 
