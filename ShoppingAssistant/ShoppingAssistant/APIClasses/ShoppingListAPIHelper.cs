@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShoppingAssistant.Models;
 
@@ -51,9 +52,9 @@ namespace ShoppingAssistant.APIClasses
         /// Retrieves the ItemQuantityPairModel before calling back to the invoker of the method
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ShoppingListModel>> GetShoppingListModelsAsync()
+        public async Task<List<ShoppingListModel>> GetShoppingListModelsAsync(CancellationToken can)
         {
-            var lists = await helper.RefreshDataAsync<ShoppingListModel>(helper.BaseUrl + ShoppingListModel.UrlSuffix);
+            var lists = await helper.RefreshDataAsync<ShoppingListModel>(helper.BaseUrl + ShoppingListModel.UrlSuffix, can);
 
             foreach (var list in lists)
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ShoppingAssistant.APIClasses;
 using ShoppingAssistant.DatabaseClasses;
@@ -48,12 +49,19 @@ namespace ShoppingAssistant.Controllers
         private readonly ShoppingListDatabaseHelper databaseHelper;
 
         /// <summary>
+        /// Cancellation token source
+        /// </summary>
+        private CancellationTokenSource cancellationTokenSource;
+
+        /// <summary>
         ///     Constructor
         /// </summary>
         /// <param name="localDatabaseName">Local database name</param>
         /// <param name="helper">Login API helper object</param>
         public ShoppingListController(string localDatabaseName, LoginApiHelper helper)
         {
+            cancellationTokenSource = new CancellationTokenSource();
+
             // Create the database and API helper objects
             databaseHelper = new ShoppingListDatabaseHelper(localDatabaseName, true);
             apiHelper = new ShoppingListApiHelper(helper);
@@ -65,6 +73,15 @@ namespace ShoppingAssistant.Controllers
         ///     Observable colleciton of shopping lists
         /// </summary>
         public ObservableCollection<ShoppingListModel> ShoppingListModels { get; }
+
+        /// <summary>
+        /// Log the user out
+        /// </summary>
+        public void Logout()
+        {
+            cancellationTokenSource.Cancel();
+            ShoppingListModels.Clear();
+        }
 
         /// <summary>
         ///     Method to delete an item from the given shopping list
@@ -120,7 +137,11 @@ namespace ShoppingAssistant.Controllers
             try
             {
                 OnDatabaseRetrieval(databaseHelper.GetShoppingLists());
-                OnApiRetrieval(await apiHelper.GetShoppingListModelsAsync());
+                OnApiRetrieval(await apiHelper.GetShoppingListModelsAsync(cancellationTokenSource.Token));
+            }
+            catch (OperationCanceledException e)
+            {
+                App.Log.Info("GetShoppingListModelsAsync", "Get cancelled");
             }
             catch (Exception e)
             {
@@ -187,10 +208,10 @@ namespace ShoppingAssistant.Controllers
         /// <param name="lists"></param>
         private void DeleteOldLists(IEnumerable<ShoppingListModel> lists)
         {
-            var listsToDelete = ShoppingListModels.Where(list => lists.All(l => l.RemoteDbId != list.RemoteDbId));
-            var shoppingListModels = listsToDelete as IList<ShoppingListModel> ?? listsToDelete.ToList();
-            shoppingListModels.ForEach(i => ShoppingListModels.Remove(i));
-            shoppingListModels.ForEach(databaseHelper.DeleteShoppingListAsync);
+            var listsToDelete = ShoppingListModels.Where(list => lists.All(l => l.RemoteDbId != list.RemoteDbId)).ToList();
+
+            listsToDelete.ForEach(i => ShoppingListModels.Remove(i));
+            listsToDelete.ForEach(databaseHelper.DeleteShoppingListAsync);
         }
 
         /// <summary>

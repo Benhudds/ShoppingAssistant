@@ -116,7 +116,7 @@ namespace ShoppingAssistant
                 selectedItem = ItemsListView.SelectedItem;
                 if (ToolbarItems.All(t => t.Text != "Delete"))
                 {
-                    ToolbarItems.Add(new ToolbarItem("Delete", "filter.png", async () => { var page = new ContentPage(); DeleteSelectedItem(); }));
+                    ToolbarItems.Add(new ToolbarItem("Delete", "icon.png", async () => { var page = new ContentPage(); DeleteSelectedItem(); }));
 
                 }
             }

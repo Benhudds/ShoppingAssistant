@@ -154,7 +154,7 @@ namespace ShoppingAssistant.Controllers
         /// </summary>
         public void Logout()
         {
-            ShoppingListController.ShoppingListModels.Clear();
+            ShoppingListController.Logout();
             LocationController.LocationModels.Clear();
         }
 

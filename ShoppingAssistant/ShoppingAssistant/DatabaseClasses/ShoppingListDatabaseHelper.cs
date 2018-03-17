@@ -39,8 +39,8 @@ namespace ShoppingAssistant.DatabaseClasses
         private void CreateDatabases()
         {
             // Drop the tables
-            //DatabaseAsyncConnection.DropTableAsync<ShoppingListModel>();
-            //DatabaseAsyncConnection.DropTableAsync<ItemQuantityPairModel>();
+            DatabaseAsyncConnection.DropTableAsync<ShoppingListModel>();
+            DatabaseAsyncConnection.DropTableAsync<ItemQuantityPairModel>();
             //DatabaseAsyncConnection.DropTableAsync<ListOwnerModel>();
             
             // Create the tables if necessary

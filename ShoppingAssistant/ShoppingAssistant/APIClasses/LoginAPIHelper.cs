@@ -119,6 +119,20 @@ namespace ShoppingAssistant.APIClasses
             return await base.RefreshDataAsync<T>(url);
         }
 
+
+        /// <summary>
+        /// Overrides the RefreshDataAsync method in the base class
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="can"></param>
+        /// <returns></returns>
+        public new async Task<List<T>> RefreshDataAsync<T>(string url, CancellationToken can)
+        {
+            AwaitLogin();
+            return await base.RefreshDataAsync<T>(url, can);
+        }
+
         /// <summary>
         /// Overrides the DeleteItemAsync method in the base class
         /// </summary>

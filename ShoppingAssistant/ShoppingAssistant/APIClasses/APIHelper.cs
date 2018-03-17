@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using ModernHttpClient;
 using Newtonsoft.Json;
 using ShoppingAssistant.Models;
@@ -251,6 +252,29 @@ namespace ShoppingAssistant.APIClasses
             // Get http response
             var uri = new Uri(url);
             var response = await client.GetAsync(uri);
+
+
+            // Return null if not successful
+            if (!response.IsSuccessStatusCode) return null;
+
+            // Convert json in http response to a List of T items
+            var content = await response.Content.ReadAsStringAsync();
+            var items = JsonConvert.DeserializeObject<List<T>>(content);
+            return items;
+        }
+
+        /// <summary>
+        /// Method to get json data asynchronously for a given type from the given url
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="can"></param>
+        /// <returns></returns>
+        public async Task<List<T>> RefreshDataAsync<T>(string url, CancellationToken can)
+        {
+            // Get http response
+            var uri = new Uri(url);
+            var response = await client.GetAsync(uri, can);
 
 
             // Return null if not successful
