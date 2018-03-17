@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ShoppingAssistant.APIClasses;
 using ShoppingAssistant.DatabaseClasses;
@@ -64,9 +65,10 @@ namespace ShoppingAssistant.Controllers
                     var localUsers = await dbHelper.GetItemsAsync<UserModel>();
                     var cryptPass = Crypt.Crypt.Encrypt(user.Password);
                     var matchingUsers = localUsers.Where(dbUser => user.Email == dbUser.Email && cryptPass == dbUser.Password);
-                    if (matchingUsers.Any())
+                    var userModels = matchingUsers as IList<UserModel> ?? matchingUsers.ToList();
+                    if (userModels.Any())
                     {
-                        user.LocalDbId = matchingUsers.First().LocalDbId;
+                        user.LocalDbId = userModels.First().LocalDbId;
                         CurrentUser = user;
                         App.Log.Debug("Login", "Logged user " + user.Email + " in from the local database");
                         return LoginResponse.Success;

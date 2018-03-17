@@ -6,55 +6,49 @@ using System.Threading.Tasks;
 using ShoppingAssistant.APIClasses;
 using ShoppingAssistant.DatabaseClasses;
 using ShoppingAssistant.Models;
-
 using Xamarin.Forms.Internals;
 
 namespace ShoppingAssistant.Controllers
 {
     /// <summary>
-    /// ShoppingList Controller class
+    ///     ShoppingList Controller class
     /// </summary>
     public class ShoppingListController
     {
         /// <summary>
-        /// Const notification title for new shopping lists
+        ///     Const notification title for new shopping lists
         /// </summary>
         private const string NewShoppingListTitle = "You have a new shopping list";
 
         /// <summary>
-        /// Const notification text for new shopping lists
-        /// Takes 1 parameter giving the shopping list name
+        ///     Const notification text for new shopping lists
+        ///     Takes 1 parameter giving the shopping list name
         /// </summary>
         private const string NewShoppingListText = "The shopping list {0} has been added to your account";
 
         /// <summary>
-        /// Const notification title for updated shopping lists
+        ///     Const notification title for updated shopping lists
         /// </summary>
         private const string UpdatedShoppingListTitle = "A shopping list has been updated";
 
         /// <summary>
-        /// Const notification text for updated shopping lists
-        /// Takes 1 parameter giving the shopping list name
+        ///     Const notification text for updated shopping lists
+        ///     Takes 1 parameter giving the shopping list name
         /// </summary>
         private const string UpdatedShoppingListText = "The shopping list {0} has been updated";
 
         /// <summary>
-        /// Static reference to ShoppingList specific database helper class
-        /// </summary>
-        private readonly ShoppingListDatabaseHelper databaseHelper;
-
-        /// <summary>
-        /// Static reference to ShoppingList specific api helper class
+        ///     Static reference to ShoppingList specific api helper class
         /// </summary>
         private readonly ShoppingListApiHelper apiHelper;
 
         /// <summary>
-        /// Observable colleciton of shopping lists
+        ///     Static reference to ShoppingList specific database helper class
         /// </summary>
-        public ObservableCollection<ShoppingListModel> ShoppingListModels { get; }
+        private readonly ShoppingListDatabaseHelper databaseHelper;
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="localDatabaseName">Local database name</param>
         /// <param name="helper">Login API helper object</param>
@@ -68,7 +62,12 @@ namespace ShoppingAssistant.Controllers
         }
 
         /// <summary>
-        /// Method to delete an item from the given shopping list
+        ///     Observable colleciton of shopping lists
+        /// </summary>
+        public ObservableCollection<ShoppingListModel> ShoppingListModels { get; }
+
+        /// <summary>
+        ///     Method to delete an item from the given shopping list
         /// </summary>
         /// <param name="list"></param>
         /// <param name="iqp"></param>
@@ -86,16 +85,14 @@ namespace ShoppingAssistant.Controllers
 
             // Delete from local db if it is deleted on the api
             if (deleted)
-            {
                 databaseHelper.DeleteItemAsync(iqp);
-            }
         }
 
         /// <summary>
-        /// Asynchronous method that deletes a shopping list
-        /// Sets the deleted flag and saves the model locally
-        /// Then attempts to delete the model on the API
-        /// Deletes from the local database if it is successfully deleted on the API
+        ///     Asynchronous method that deletes a shopping list
+        ///     Sets the deleted flag and saves the model locally
+        ///     Then attempts to delete the model on the API
+        ///     Deletes from the local database if it is successfully deleted on the API
         /// </summary>
         /// <param name="list"></param>
         public async void DeleteShoppingListAsync(ShoppingListModel list)
@@ -104,67 +101,67 @@ namespace ShoppingAssistant.Controllers
 
             list.Deleted = true;
             foreach (var item in list.Items)
-            {
                 item.Deleted = true;
-            }
-            
+
             // Save this item to the database as deleted so that it can be deleted if the api call fails
             databaseHelper.SaveShoppingListAsync(list);
 
             var deleted = await apiHelper.DeleteShoppingListModelAsync(list);
 
             if (deleted)
-            {
                 databaseHelper.DeleteShoppingListAsync(list);
-            }
         }
-        
+
         /// <summary>
-        /// Asynchronous method to get the shopping lists from both the local database and the API
+        ///     Asynchronous method to get the shopping lists from both the local database and the API
         /// </summary>
         public async void GetShoppingListModelsAsync()
         {
             try
             {
                 OnDatabaseRetrieval(databaseHelper.GetShoppingLists());
-                OnApiRetrieval(await apiHelper.GetShoppingListModelsAsync()); 
+                OnApiRetrieval(await apiHelper.GetShoppingListModelsAsync());
             }
             catch (Exception e)
             {
-                App.Log.Error("GetShoppingListModelsAsync", "Message - " + e.Message + " " + "Source - " + e.Source + e.GetBaseException().Message + "\n" + e.StackTrace);
+                App.Log.Error("GetShoppingListModelsAsync",
+                    "Message - " + e.Message + " " + "Source - " + e.Source + e.GetBaseException().Message + "\n" +
+                    e.StackTrace);
             }
         }
 
         /// <summary>
-        /// Method to deal with data retrieved form the API
+        ///     Method to deal with data retrieved form the API
         /// </summary>
         /// <param name="lists"></param>
         private void OnApiRetrieval(IEnumerable<ShoppingListModel> lists)
         {
-            foreach (var list in lists)
+            var shoppingListModels = lists as IList<ShoppingListModel> ?? lists.ToList();
+            DeleteOldLists(shoppingListModels);
+
+            foreach (var list in shoppingListModels)
             {
-                var oldList = this.ShoppingListModels.FirstOrDefault(l => l.RemoteDbId == list.RemoteDbId);
+                var oldList = ShoppingListModels.FirstOrDefault(l => l.RemoteDbId == list.RemoteDbId);
 
                 if (oldList == null)
                 {
                     // Add the list to the list view
-                    this.ShoppingListModels.Add(list);
+                    ShoppingListModels.Add(list);
 
                     // Save the list to the database asynchronously
                     databaseHelper.SaveShoppingListAsync(list);
 
                     App.Log.Info("OnApiRetrieval", "New shopping list retrieved from API");
-                    App.NotificationHelper.CreateNotification(NewShoppingListTitle, string.Format(NewShoppingListText, list.Name));
+                    App.NotificationHelper.CreateNotification(NewShoppingListTitle,
+                        string.Format(NewShoppingListText, list.Name));
                 }
                 else if (RubyDateParser.Compare(oldList.LastUpdated, list.LastUpdated) <= 0)
                 {
                     App.Log.Info("OnApiRetrieval", $"Found newer version of shopping list {list.Name} on API");
                     if (!oldList.Equals(list))
-                    {
                         App.NotificationHelper.CreateNotification(UpdatedShoppingListTitle,
                             string.Format(UpdatedShoppingListText, list.Name));
-                    }
-                    
+
                     // Replace the old list with the stored list
                     var index = ShoppingListModels.IndexOf(oldList);
 
@@ -185,18 +182,28 @@ namespace ShoppingAssistant.Controllers
         }
 
         /// <summary>
-        /// Method to save the local lists on the API
+        ///     Method to remove all the old lists after an api response
+        /// </summary>
+        /// <param name="lists"></param>
+        private void DeleteOldLists(IEnumerable<ShoppingListModel> lists)
+        {
+            var listsToDelete = ShoppingListModels.Where(list => lists.All(l => l.RemoteDbId != list.RemoteDbId));
+            var shoppingListModels = listsToDelete as IList<ShoppingListModel> ?? listsToDelete.ToList();
+            shoppingListModels.ForEach(i => ShoppingListModels.Remove(i));
+            shoppingListModels.ForEach(databaseHelper.DeleteShoppingListAsync);
+        }
+
+        /// <summary>
+        ///     Method to save the local lists on the API
         /// </summary>
         private void PushLocalLists()
         {
             foreach (var list in ShoppingListModels.Where(slist => slist.RemoteDbId == null))
-            {
                 apiHelper.SaveShoppingListModelAsync(list);
-            }
         }
 
         /// <summary>
-        /// Method to deal with data retrieved from the local database
+        ///     Method to deal with data retrieved from the local database
         /// </summary>
         /// <param name="lists"></param>
         private void OnDatabaseRetrieval(IEnumerable<ShoppingListModel> lists)
@@ -204,11 +211,9 @@ namespace ShoppingAssistant.Controllers
             foreach (var list in lists)
             {
                 if (list.Deleted)
-                {
                     DeleteShoppingListAsync(list);
-                }
 
-                var oldList = this.ShoppingListModels.FirstOrDefault(l => l.LocalDbId == list.LocalDbId);
+                var oldList = ShoppingListModels.FirstOrDefault(l => l.LocalDbId == list.LocalDbId);
 
                 if (oldList == null)
                 {
@@ -226,10 +231,10 @@ namespace ShoppingAssistant.Controllers
                 list.Items.Select(item => item.Name).ForEach(App.MasterController.AddItem);
             }
         }
-        
+
         /// <summary>
-        /// Method to save the given shopping list to the local database and api
-        /// Attempts to get the api remote database id to save into the local database
+        ///     Method to save the given shopping list to the local database and api
+        ///     Attempts to get the api remote database id to save into the local database
         /// </summary>
         /// <param name="list"></param>
         public async void SaveShoppingListModel(ShoppingListModel list)
@@ -246,7 +251,7 @@ namespace ShoppingAssistant.Controllers
         }
 
         /// <summary>
-        /// Method to save a ShoppingList to the database
+        ///     Method to save a ShoppingList to the database
         /// </summary>
         /// <param name="list"></param>
         private void SaveShoppingListToDatabase(ShoppingListModel list)
@@ -255,7 +260,7 @@ namespace ShoppingAssistant.Controllers
         }
 
         /// <summary>
-        /// Method to add a new owner to the given ShoppingList
+        ///     Method to add a new owner to the given ShoppingList
         /// </summary>
         /// <param name="list"></param>
         /// <param name="newUserEmail"></param>
@@ -265,13 +270,11 @@ namespace ShoppingAssistant.Controllers
 
             // Create a ListOwnerModel in the local database if the api responds with success
             if (apiResponse)
-            {
-                databaseHelper.SaveItemsAsync<ListOwnerModel>(new ListOwnerModel()
+                databaseHelper.SaveItemsAsync(new ListOwnerModel
                 {
                     ShoppingListModelId = list.LocalDbId.Value,
                     UserEmail = newUserEmail
-                });   
-            }
+                });
 
             return apiResponse;
         }

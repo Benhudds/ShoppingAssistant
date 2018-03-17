@@ -37,7 +37,7 @@ namespace ShoppingAssistant.Controllers
         private async void GetItemMatches()
         {
             var dbMatches = await itemMatchDbHelper.GetItemsAsync<ItemMatch>();
-            dbMatches.ForEach(match => this.matches.Add(match));
+            dbMatches.ForEach(match => matches.Add(match));
         }
 
         public void AddItemMatch(ItemMatch match)

@@ -60,6 +60,8 @@ namespace ShoppingAssistant.Views
 			ItemFilterTextEntry.TextChanged += OnFilterTextChanged;
 			BtnAddIpl.Clicked += delegate { OnAddItemClick(); };
 
+		    Title = location.Name;
+
 			BindingContext = this;
 		}
 
@@ -83,6 +85,8 @@ namespace ShoppingAssistant.Views
 			args.ItemPriceLocationModel.LocalDbLocationId = locationModel.LocalDbId ?? 0;
 			locationModel.ItemPriceLocations.Add(args.ItemPriceLocationModel);
 			iplsMutable.Add(args.ItemPriceLocationModel);
+
+		    App.MasterController.LocationController.SaveLocationModel(locationModel);
 
 			await Navigation.PopAsync();
 		}

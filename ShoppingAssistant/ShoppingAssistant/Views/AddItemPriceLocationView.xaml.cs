@@ -23,6 +23,16 @@ namespace ShoppingAssistant.Views
 		/// </summary>
 		public string Price { get; set; }
 
+        /// <summary>
+        /// Binding Property
+        /// </summary>
+        public string Quantity { get; set; }
+
+        /// <summary>
+        /// Binding Property
+        /// </summary>
+        public string Measure { get; set; }
+
 		/// <summary>
 		/// Constructor
 		/// </summary>
@@ -41,11 +51,12 @@ namespace ShoppingAssistant.Views
 		/// </summary>
 		private void RaiseNewItemPriceLocationEvent()
 		{
-			// TODO error handling for non-float values
 			callBack?.Invoke(this, new ItemPriceLocationEventArgs(new ItemPriceLocationModel()
 			{
-				Name = this.Name,
-				Price = float.Parse(this.Price)
+				Name = Name,
+				Price = float.Parse(Price),
+                Quantity = float.Parse(Quantity),
+                Measure = Measure,
 			}));
 		}
 

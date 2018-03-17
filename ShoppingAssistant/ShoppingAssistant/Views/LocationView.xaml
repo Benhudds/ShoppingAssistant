@@ -28,13 +28,16 @@
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout Orientation="Horizontal"
-                                         VerticalOptions="Center">
+                                         VerticalOptions="Center"
+                                         HorizontalOptions="Fill">
                                 <Label Text="{Binding Name}" 
                                        Style="{DynamicResource ListItemTextStyle}"
-                                       HorizontalOptions="StartAndExpand"/>
-                                <Label Text="{Binding Path=Price, StringFormat='£{0}'}"
+                                       HorizontalOptions="Start"/>
+                                <Label Text="{Binding Path=Price, StringFormat='£{0:0.00}'}"
                                        Style="{DynamicResource ListItemDetailTextStyle}"
-                                       HorizontalOptions="End"/>
+                                       HorizontalOptions="EndAndExpand"
+                                       VerticalOptions="Center"
+                                       LineBreakMode="NoWrap"/>
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>

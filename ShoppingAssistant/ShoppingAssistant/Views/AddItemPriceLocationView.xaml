@@ -3,11 +3,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ShoppingAssistant.Views.AddItemPriceLocationView">
     <ContentPage.Content>
-        <StackLayout>
-            <Entry Placeholder="Item"
-                   Text="{Binding Name}"/>
-            <Entry Placeholder="Price"
-                   Text="{Binding Price}"/>
+        <StackLayout
+            Margin="20,20,20,20">
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Item: "
+                       VerticalOptions="Center"/>
+                <Entry Text="{Binding Name}"
+                       HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Price (£): "
+                       VerticalOptions="Center"/>
+                <Entry Text="{Binding Price}"
+                       Keyboard="Numeric"
+                       HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Quantity: "
+                       VerticalOptions="Center"/>
+                <Entry Text="{Binding Quantity}"
+                       Keyboard="Numeric"
+                       HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Measurement: "
+                       VerticalOptions="Center"/>
+                <Entry Text="{Binding Measure}"
+                       HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
             <Button Text="Add"
                     x:Name="BtnAddIpl"
                     Style="{StaticResource buttonGreen}"/>

@@ -224,9 +224,10 @@ namespace ShoppingAssistant.Views
 
             // Get any stored matches from database
 	        var matches = GetItemMatches();
-	        if (matches.Any())
+	        var itemMatches = matches as IList<ItemMatch> ?? matches.ToList();
+	        if (itemMatches.Any())
 	        {
-	            var storedMatch = matches.FirstOrDefault(match => match.Item == iqp.Name);
+	            var storedMatch = itemMatches.FirstOrDefault(match => match.Item == iqp.Name);
 	            if (storedMatch != null && res.Any(r => r.item.Name == storedMatch.Match))
 	            {
 	                res.Select(p => p.item).ForEach(itemMatch.PotentialMatch.Ipls.Add);
