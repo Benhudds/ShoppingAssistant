@@ -50,7 +50,7 @@ namespace ShoppingAssistant.APIClasses
 
             if (locations == null)
             {
-                App.Log.Error("GetLocationModelsAsync", "Lcoations not returned by API helper. Url = " + baseUrl + LocationModel.UrlSuffix + " \nLat = " + lat + "\nLng = " + lng);
+                App.Log.Error("GetLocationModelsAsync", "Locations not returned by API helper. Url = " + baseUrl + LocationModel.UrlSuffix + " \nLat = " + lat + "\nLng = " + lng);
                 return null;
             }
 

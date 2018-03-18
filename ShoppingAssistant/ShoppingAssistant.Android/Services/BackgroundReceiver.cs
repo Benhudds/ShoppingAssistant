@@ -13,6 +13,7 @@ namespace ShoppingAssistant.Droid.Services
     [BroadcastReceiver]
     public class BackgroundReceiver : BroadcastReceiver
     {
+        /// <inheritdoc />
         /// <summary>
         /// Overriden OnReceive method. Called by alarm manager
         /// </summary>
@@ -22,11 +23,10 @@ namespace ShoppingAssistant.Droid.Services
         {
             try
             {
+                Log.Debug("BackgroundReceiver", "Woken by alarm manager");
                 PowerManager pm = (PowerManager) context.GetSystemService(Context.PowerService);
                 PowerManager.WakeLock wakeLock = pm.NewWakeLock(WakeLockFlags.Partial, "BackgroundReceiver");
                 wakeLock.Acquire();
-                
-                Log.Debug("BackgroundReceiver", "Woken by alarm manager");
                 
                 App.MasterController.ShoppingListController.GetShoppingListModelsAsync();
                 App.MasterController.LocationController.GetNearbyLocations();

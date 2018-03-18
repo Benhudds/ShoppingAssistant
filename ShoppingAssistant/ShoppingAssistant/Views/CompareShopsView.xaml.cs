@@ -82,11 +82,18 @@ namespace ShoppingAssistant.Views
         /// <param name="args"></param>
 	    private void ProcessNewLocation(object sender, NotifyCollectionChangedEventArgs args)
 	    {
-            ComparePrices(args.NewItems.Cast<LocationModel>());
+	        try
+	        {
+	            ComparePrices(args.NewItems.Cast<LocationModel>());
 
-	        OrderBy();
+	            OrderBy();
 
-	        ShoppingListsView.IsRefreshing = false;
+	            ShoppingListsView.IsRefreshing = false;
+            }
+            catch (Exception ex)
+	        {
+	            App.Log.Error("ProcessNewLocation", ex.Message + "\n" + ex.StackTrace);
+	        }
 	    }
 
         /// <summary>

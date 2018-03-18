@@ -88,8 +88,15 @@ namespace ShoppingAssistant.Droid
         /// <param name="bundle"></param>
         protected override void OnCreate (Bundle bundle)
 		{
+            // ANR debugging
+            
+		    StrictMode.SetThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+		        .DetectAll()
+		        .PenaltyLog()
+		        .Build());
+
             // Inject the geolocator dependency service
-		    DependencyService.Register<Geolocator>();
+            DependencyService.Register<Geolocator>();
 
             TabLayoutResource = Resource.Layout.Tabbar;
 			ToolbarResource = Resource.Layout.Toolbar; 

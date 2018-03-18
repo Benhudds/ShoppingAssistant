@@ -101,9 +101,12 @@ namespace ShoppingAssistant.Controllers
         /// <param name="models"></param>
         private void SaveAndAddLocationModels(List<LocationModel> models)
         {
-            models.ForEach(databaseHelper.SaveLocationModelAsync);
+            if (models != null)
+            {
+                models.ForEach(databaseHelper.SaveLocationModelAsync);
 
-            AddLocationModels(models);
+                AddLocationModels(models);
+            }
         }
 
         /// <summary>

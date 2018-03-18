@@ -71,7 +71,7 @@ namespace ShoppingAssistant.Views
 	    {
 	        if (string.IsNullOrEmpty(Name))
 	        {
-	            LabelError.Text = "Item cannot be blank";
+                LabelError.Text = "Item cannot be blank";
 	            return false;
 	        }
 

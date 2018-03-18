@@ -78,19 +78,26 @@ namespace ShoppingAssistant.Views
 		/// <param name="args"></param>
 		private void NewLocationModel(object sender, NotifyCollectionChangedEventArgs args)
 		{
-			// Add the new LocationModels to the mutable collection
-			// They master collection is just a reference to the collection invoking this method
-			// so no need to add it again
-			foreach (var model in args.NewItems)
-			{
-				AddLocationModel((LocationModel) model);
-			}
+		    try
+		    {
+		        // Add the new LocationModels to the mutable collection
+		        // They master collection is just a reference to the collection invoking this method
+		        // so no need to add it again
+		        foreach (var model in args.NewItems)
+		        {
+		            AddLocationModel((LocationModel) model);
+		        }
 
-			// Remove the refreshing symbol if there is data
-			if (locationsMutable.Count != 0)
-			{
-				this.FindByName<ListView>("LocationsListView").EndRefresh();
-			}
+		        // Remove the refreshing symbol if there is data
+		        if (locationsMutable.Count != 0)
+		        {
+		            this.FindByName<ListView>("LocationsListView").EndRefresh();
+		        }
+		    }
+		    catch (Exception ex)
+		    {
+		        App.Log.Error("NewLocationModel", ex.Message + "\n" + ex.StackTrace);
+		    }
 		}
 
         /// <summary>
