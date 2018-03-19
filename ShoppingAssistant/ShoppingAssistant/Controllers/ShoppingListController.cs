@@ -208,7 +208,9 @@ namespace ShoppingAssistant.Controllers
         /// <param name="lists"></param>
         private void DeleteOldLists(IEnumerable<ShoppingListModel> lists)
         {
-            var listsToDelete = ShoppingListModels.Where(list => lists.All(l => l.RemoteDbId != list.RemoteDbId)).ToList();
+            var currentListsList = ShoppingListModels.ToList();
+            
+            var listsToDelete = currentListsList.Where(list => lists.All(l => l.RemoteDbId != list.RemoteDbId)).ToList();
 
             listsToDelete.ForEach(i => ShoppingListModels.Remove(i));
             listsToDelete.ForEach(databaseHelper.DeleteShoppingListAsync);

@@ -71,7 +71,7 @@ namespace ShoppingAssistant.Models
         /// <param name="model"></param>
         public void DeleteOldItems(ShoppingListModel model)
         {
-            var itemsToDelete = Items.Where(item => model.Items.All(m => m.RemoteDbId != item.RemoteDbId));
+            var itemsToDelete = Items.Where(item => model.Items.All(m => m.RemoteDbId != item.RemoteDbId)).ToList();
             itemsToDelete.ForEach(i => Items.Remove(i));
         }
 

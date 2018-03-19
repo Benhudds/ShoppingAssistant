@@ -100,7 +100,11 @@ namespace ShoppingAssistant.Views
 	        {
 	            await ComparePrices(args.NewItems.Cast<LocationModel>());
                 OrderBy();
-                ShoppingListsView.IsRefreshing = false;
+
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    ShoppingListsView.IsRefreshing = false;
+                });
 	        }
 	        catch (Exception ex)
 	        {
@@ -133,12 +137,6 @@ namespace ShoppingAssistant.Views
                             // Loop through each iqp in the shopping list
                             foreach (var item in shoppingList.Items)
                             {
-
-                                //if (ipl == null)
-                                //{
-                                //    break;
-                                //}
-
                                 // Create an ItemMatch to be added to the LocationPriceViewModel
                                 var itemMatch = new ItemMatchViewModel()
                                 {
@@ -179,7 +177,10 @@ namespace ShoppingAssistant.Views
                             }
 
                             // Remove the refreshing icon
-                            ShoppingListsView.IsRefreshing = false;
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                ShoppingListsView.IsRefreshing = false;
+                            });
                         }
                         catch (Exception e)
                         {
