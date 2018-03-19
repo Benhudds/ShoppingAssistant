@@ -46,13 +46,19 @@ namespace ShoppingAssistant.Views
 
             locationPriceModelView.ItemMatches.Remove(itemMatch);
             locationPriceModelView.Price -= itemMatch.Price;
-            
-            itemMatch.MatchedTo = ipl.Name;
-            itemMatch.Price = CompareShopsView.CalculatePrice(itemMatch.PotentialMatch.Iqp, ipl);
-            itemMatch.ImageUrl = ipl.ImageUrl;
 
-            locationPriceModelView.ItemMatches.Add(itemMatch);
-            locationPriceModelView.Price += itemMatch.Price;
+            var newItemMatch = new ItemMatchViewModel()
+            {
+                PotentialMatch = itemMatch.PotentialMatch,
+                MatchedTo = ipl.Name,
+                Price = CompareShopsView.CalculatePrice(itemMatch.PotentialMatch.Iqp, ipl),
+                ImageUrl = ipl.ImageUrl,
+                Matched = true
+            };
+
+            locationPriceModelView.ItemMatches.Add(newItemMatch);
+
+            locationPriceModelView.Price += newItemMatch.Price;
 
             // Store match in database
             var match = new ItemMatch()

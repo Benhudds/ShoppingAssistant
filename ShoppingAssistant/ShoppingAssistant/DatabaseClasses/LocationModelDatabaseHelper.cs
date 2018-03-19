@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq; 
+using System.Linq;
+using System.Threading.Tasks;
 using ShoppingAssistant.Models;
 using Xamarin.Forms.Internals;
 
@@ -40,15 +41,15 @@ namespace ShoppingAssistant.DatabaseClasses
         /// Method to get the LocationModels
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<LocationModel> GetLocationModels()
+        public async Task<IEnumerable<LocationModel>> GetLocationModelsAsync()
         {
             IEnumerable<LocationModel> locations = new List<LocationModel>();
 
             try
             {
                 // Get the locations and ilps
-                locations = GetItemsAsync<LocationModel>().Result;
-                var ilps = GetItemsAsync<ItemPriceLocationModel>().Result;
+                locations = await GetItemsAsync<LocationModel>();
+                var ilps = await GetItemsAsync<ItemPriceLocationModel>();
 
                 // Add references to the ilps to the required location
                 ilps.ForEach(ilp =>

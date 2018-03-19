@@ -69,7 +69,12 @@ namespace ShoppingAssistant.Views
 			{
 				this.FindByName<ListView>("LocationsListView").BeginRefresh();
 			}
-		}
+
+		    if (!App.MasterController.LocationController.IsGpsEnabled())
+		    {
+		        DisplayAlert("Please enable gps", "Gps must be enabled for this app to provide nearby location and price data", "OK");
+		    }
+        }
 
 		/// <summary>
 		/// Event raised when a new LocationModel is added by the LocationController

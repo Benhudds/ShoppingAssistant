@@ -54,6 +54,8 @@ namespace ShoppingAssistant.APIClasses
                 return null;
             }
 
+            App.Log.Info("GetLocationModelsAsync", locations.Count + " locations returned from API");
+
             foreach (var location in locations)
             {
                 await GetItemPriceLocationModelsAsync(location);

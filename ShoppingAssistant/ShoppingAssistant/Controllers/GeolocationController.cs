@@ -39,7 +39,21 @@ namespace ShoppingAssistant.Controllers
         {
             geolocator = DependencyService.Get<IGeolocator>();
         }
-        
+
+        /// <summary>
+        /// Method to check if gps positioning available
+        /// </summary>
+        /// <returns></returns>
+        public bool IsGpsAvailable()
+        {
+            if (geolocator != null && geolocator.IsGeolocationAvailable && geolocator.IsGeolocationEnabled)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Asynchronously gets the current position
         /// Raises a PositionEvent on the NewPositionEvent handler

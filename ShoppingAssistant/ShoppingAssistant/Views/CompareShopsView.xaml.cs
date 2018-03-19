@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using ShoppingAssistant.Controllers;
 using ShoppingAssistant.DatabaseClasses;
 using ShoppingAssistant.Models;
@@ -63,6 +64,7 @@ namespace ShoppingAssistant.Views
 
             // Set the refreshing command and calculate the prices for any locations that are currently available.
 		    ShoppingListsView.IsRefreshing = true;
+
             ComparePrices(App.MasterController.LocationController.LocationModels);
 
             // Set binding context
@@ -76,101 +78,121 @@ namespace ShoppingAssistant.Views
         }
 
         /// <summary>
-        /// Process a new location event
+        /// Process a new location event handler
+        /// Wrapper for async method
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
 	    private void ProcessNewLocation(object sender, NotifyCollectionChangedEventArgs args)
 	    {
+	        ProcessNewLocation(args);
+	    }
+
+        /// <summary>
+        /// Process a new location
+        /// Start async task to get price comparison data
+        /// Then order data
+        /// </summary>
+        /// <param name="args"></param>
+	    private async void ProcessNewLocation(NotifyCollectionChangedEventArgs args)
+	    {
 	        try
 	        {
-	            ComparePrices(args.NewItems.Cast<LocationModel>());
-
-	            OrderBy();
-
-	            ShoppingListsView.IsRefreshing = false;
-            }
-            catch (Exception ex)
+	            await ComparePrices(args.NewItems.Cast<LocationModel>());
+                OrderBy();
+                ShoppingListsView.IsRefreshing = false;
+	        }
+	        catch (Exception ex)
 	        {
 	            App.Log.Error("ProcessNewLocation", ex.Message + "\n" + ex.StackTrace);
 	        }
-	    }
+        }
 
         /// <summary>
         /// Method to compare prices for the given locations and put the results in the LocationPriceModels
         /// </summary>
         /// <param name="locations"></param>
-	    private void ComparePrices(IEnumerable<LocationModel> locations)
-	    {
-            // Loop through the locations
-	        foreach (var location in locations)
-	        {
-	            try
-	            {
-                    // Create a new location price model for this location
-	                var lpm = new LocationPriceViewModel()
-	                {
-	                    Location = location,
-                        ShoppingListName = shoppingList.Name
-	                };
-                
-                    // Loop through each iqp in the shopping list
-	                foreach (var item in shoppingList.Items)
-	                {
-
-	                    //if (ipl == null)
-	                    //{
-	                    //    break;
-	                    //}
-
-                        // Create an ItemMatch to be added to the LocationPriceViewModel
-	                    var itemMatch = new ItemMatchViewModel()
-	                    {
-                            PotentialMatch = new PotentialMatchViewModel()
+	    private async Task ComparePrices(IEnumerable<LocationModel> locations)
+        {
+            await Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    // Loop through the locations
+                    foreach (var location in locations)
+                    {
+                        try
+                        {
+                            // Create a new location price model for this location
+                            var lpm = new LocationPriceViewModel()
                             {
-                                Iqp = item
-                            },
-	                        Matched = false,
-	                    };
+                                Location = location,
+                                ShoppingListName = shoppingList.Name
+                            };
 
-	                    // Get the best ipl match for the iqp
-	                    var ipl = GetBestMatch(item, location, itemMatch);
+                            // Loop through each iqp in the shopping list
+                            foreach (var item in shoppingList.Items)
+                            {
 
-                        // Calculate price and set attributes if ipl match has been found
-                        if (ipl != null)
-	                    {
-	                        var price = CalculatePrice(item, ipl);
-	                        lpm.Price += price;
-	                        lpm.NumberOfItemsMatched++;
+                                //if (ipl == null)
+                                //{
+                                //    break;
+                                //}
 
-	                        itemMatch.Matched = true;
-	                        itemMatch.Price = Math.Round(price, 2);
-	                        itemMatch.MatchedTo = ipl.Name;
-	                        itemMatch.ImageUrl = ipl.ImageUrl;
-	                    }
+                                // Create an ItemMatch to be added to the LocationPriceViewModel
+                                var itemMatch = new ItemMatchViewModel()
+                                {
+                                    PotentialMatch = new PotentialMatchViewModel()
+                                    {
+                                        Iqp = item
+                                    },
+                                    Matched = false,
+                                };
 
-                        // Add the match item to the LocationPriceViewModel
-	                    lpm.ItemMatches.Add(itemMatch);
-	                }
+                                // Get the best ipl match for the iqp
+                                var ipl = GetBestMatch(item, location, itemMatch);
 
-                    // Round the price
-	                lpm.Price = Math.Round(lpm.Price, 2);
-                    
-                    // Add the LocationPriceViewModel to the collection
-	                if (lpm.NumberOfItemsMatched != 0)
-	                {
-	                    locationPriceModels.Add(lpm);
-	                }
+                                // Calculate price and set attributes if ipl match has been found
+                                if (ipl != null)
+                                {
+                                    var price = CalculatePrice(item, ipl);
+                                    lpm.Price += price;
+                                    lpm.NumberOfItemsMatched++;
 
-	                // Remove the refreshing icon
-                    ShoppingListsView.IsRefreshing = false;
-	            }
-	            catch (Exception e)
-	            {
-	                App.Log.Error("ComparePrices", e.Message + "\n" + e.StackTrace);
-	            }
-            }
-	    }
+                                    itemMatch.Matched = true;
+                                    itemMatch.Price = Math.Round(price, 2);
+                                    itemMatch.MatchedTo = ipl.Name;
+                                    itemMatch.ImageUrl = ipl.ImageUrl;
+                                }
+
+                                // Add the match item to the LocationPriceViewModel
+                                lpm.ItemMatches.Add(itemMatch);
+                            }
+
+                            // Round the price
+                            lpm.Price = Math.Round(lpm.Price, 2);
+
+                            // Add the LocationPriceViewModel to the collection
+                            if (lpm.NumberOfItemsMatched != 0)
+                            {
+                                locationPriceModels.Add(lpm);
+                            }
+
+                            // Remove the refreshing icon
+                            ShoppingListsView.IsRefreshing = false;
+                        }
+                        catch (Exception e)
+                        {
+                            App.Log.Error("ComparePrices", e.Message + "\n" + e.StackTrace);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    App.Log.Error("ComparePrices", ex.Message + "\n" + ex.StackTrace);
+                }
+            });
+        }
 
         /// <summary>
         /// Method to calculate the price of the given item using the given ipl

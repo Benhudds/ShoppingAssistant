@@ -75,6 +75,15 @@ namespace ShoppingAssistant.Controllers
         }
 
         /// <summary>
+        /// Method to determin if gps data is available
+        /// </summary>
+        /// <returns></returns>
+        public bool IsGpsEnabled()
+        {
+            return geolocationController.IsGpsAvailable();
+        }
+
+        /// <summary>
         /// Event handler for new GPS positions
         /// </summary>
         /// <param name="sender"></param>
@@ -84,7 +93,7 @@ namespace ShoppingAssistant.Controllers
             try
             {
                 // Get the location models for the current location
-                AddLocationModels(databaseHelper.GetLocationModels());
+                AddLocationModels(await databaseHelper.GetLocationModelsAsync());
                 SaveAndAddLocationModels(await apiHelper.GetLocationModelsAsync(
                     geolocationController.Position.Latitude,
                     geolocationController.Position.Longitude));

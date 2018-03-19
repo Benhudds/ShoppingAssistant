@@ -37,6 +37,6 @@ namespace ShoppingAssistant.Views
             // Deselect the item
             ((ListView)sender).SelectedItem = null;
             await Navigation.PushAsync(new MatchView(model, itemMatch));
-	    }
+        }
 	}
 }

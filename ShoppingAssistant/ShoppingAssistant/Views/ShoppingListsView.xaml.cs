@@ -37,6 +37,11 @@ namespace ShoppingAssistant.Views
 
 			BindingContext = this;
 
+
+		    if (!App.MasterController.LocationController.IsGpsEnabled())
+		    {
+		        DisplayAlert("Please enable gps", "Gps must be enabled for this app to provide nearby location and price data", "OK");
+		    }
 		}
 
         /// <summary>

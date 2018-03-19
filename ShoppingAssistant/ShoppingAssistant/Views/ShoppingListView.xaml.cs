@@ -173,11 +173,15 @@ namespace ShoppingAssistant
         /// </summary>
         private async void OnShareClick()
         {
+            BtnShare.IsEnabled = false;
+
             var response = await App.MasterController.ShoppingListController.AddOwnerAsync(shoppingList, Email);
 
             LblShareResult.IsVisible = true;
             LblShareResult.Text = response ? "Shared with user" : "Could not share with user";
             LblShareResult.TextColor = response ? Color.Green : Color.Red;
+
+            BtnShare.IsEnabled = true;
         }
     }
 }
